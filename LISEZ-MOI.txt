@@ -1,0 +1,26 @@
+MP VISUAL — E-PORTFOLIO DE MARLON PAVID (version du 11.11.2026)
+==============================================================
+
+Nouveau : carrousel en arc pour la série bloc, nouveaux mockups des projets,
+pictogrammes pour LinkedIn, Instagram et les logiciels, textes plus professionnels.
+
+OUVRIR LE SITE
+Double-clique sur index.html : il s'ouvre dans ton navigateur.
+Garde le dossier "assets" à côté de index.html (images, CV, polices).
+
+CONTENU
+- index.html ................ le site (tout le code est dedans)
+- assets/img/ ............... tes photos (aussi celles du carrousel), détourages, sticker, fond carte topo
+- assets/projets/ ........... mockups photoréalistes des projets + pages à feuilleter
+- assets/cv/ ................ ton CV (PDF + aperçus) — version sans adresse postale
+- assets/fonts/ ............. police Sora (la police Comico est intégrée dans index.html)
+
+METTRE EN LIGNE
+Glisse le dossier entier sur https://app.netlify.com/drop
+ou mets-le sur un dépôt GitHub et active GitHub Pages. Aucun réglage nécessaire.
+
+MODIFIER
+- Textes : tout est en clair dans index.html (sections à propos, projets, série bloc, contact).
+- Carrousel : les légendes des 8 photos sont dans la liste PHOTOS du script (cherche "const PHOTOS").
+- CV : remplace assets/cv/cv-marlon-pavid.pdf (et les deux images d'aperçu) en gardant les mêmes noms.
+- Liens LinkedIn / Instagram : cherche "linkedin.com" et "instagram.com" dans index.html.
