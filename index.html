@@ -382,6 +382,23 @@ a.btn,a.btn:hover{text-decoration:none}
 .contact .scribble{color:var(--feuille);width:min(100%,660px)}
 .contact__card{--paper:var(--craie);--r:-1.2deg;transform:rotate(var(--r))}
 .contact__card .lead{font:600 clamp(1.1rem,1.8vw,1.4rem)/1.4 var(--f-text)}
+/* formulaire de contact */
+.cform{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin:18px 0 8px}
+.cform__f{display:flex;flex-direction:column;gap:6px}
+.cform__f--full{grid-column:1 / -1}
+.cform label{font:600 .74rem/1.2 var(--f-text);letter-spacing:.12em;text-transform:uppercase;color:var(--feuille)}
+.cform input,.cform textarea{width:100%;font:400 1rem/1.4 var(--f-text);color:var(--encre);background:#fff;border:2px solid var(--encre);border-radius:2px;padding:11px 12px;box-shadow:3px 3px 0 rgb(19 63 26 / .25)}
+.cform textarea{min-height:140px;resize:vertical}
+.cform input:focus-visible,.cform textarea:focus-visible{outline:3px dashed var(--feuille);outline-offset:2px}
+.cform input:user-invalid,.cform textarea:user-invalid{border-color:#b3261e}
+.cform__hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;overflow:hidden}
+.cform__bottom{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px}
+.cform__status{font:600 .9rem/1.35 var(--f-text);color:var(--feuille)}
+.cform__status.is-error{color:#b3261e}
+.cform__legal{grid-column:1 / -1;font:400 .74rem/1.45 var(--f-text);color:rgb(19 63 26 / .75)}
+.cform button[disabled]{opacity:.6;cursor:wait}
+.mail-or{margin-top:22px;font:600 .74rem/1.2 var(--f-text);letter-spacing:.12em;text-transform:uppercase;color:var(--feuille)}
+@media (max-width:640px){.cform{grid-template-columns:1fr}}
 .contact__lieu{margin-top:8px;font:600 .85rem/1.3 var(--f-text);letter-spacing:.06em;text-transform:uppercase;color:var(--feuille)}
 .mail{display:block;margin:18px 0 20px;font:700 clamp(1.1rem,2.6vw,2rem)/1.2 var(--f-text);letter-spacing:-.02em;color:var(--feuille);
   overflow-wrap:anywhere;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px;text-decoration-color:var(--pousse);
@@ -822,7 +839,19 @@ main,.footer{position:relative;z-index:1}
       <div class="paper contact__card">
         <p class="lead">Un stage, un projet ou une collaboration&nbsp;? Écrivez-moi, je réponds par e-mail.</p>
         <p class="contact__lieu">Canton de Vaud · Suisse romande</p>
-        <a class="mail" id="mail" href="mailto:marlonpavid@gmail.com">marlonpavid@gmail.com</a>
+        <form class="cform" id="cform" action="https://formsubmit.co/ajax/marlonpavid@gmail.com" method="POST" novalidate>
+          <input type="hidden" name="_subject" value="Nouveau message depuis marlonpavid.ch">
+          <input type="hidden" name="_template" value="table">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="text" name="_honey" class="cform__hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="cform__f"><label for="cf-nom">Nom</label><input id="cf-nom" name="name" type="text" required minlength="2" maxlength="80" autocomplete="name"></div>
+          <div class="cform__f"><label for="cf-mail">E-mail</label><input id="cf-mail" name="email" type="email" required maxlength="120" autocomplete="email"></div>
+          <div class="cform__f cform__f--full"><label for="cf-msg">Message</label><textarea id="cf-msg" name="message" required minlength="10" maxlength="2000"></textarea></div>
+          <div class="cform__bottom"><button class="btn" type="submit" id="cf-send"><svg class="star" aria-hidden="true"><use href="#star-3"/></svg>envoyer</button><span class="cform__status" id="cf-status" role="status" aria-live="polite"></span></div>
+          <p class="cform__legal">Vos données servent uniquement à vous répondre. Elles sont transmises par connexion chiffrée au service FormSubmit, qui me les envoie par e-mail ; rien n'est stocké sur ce site.</p>
+        </form>
+        <p class="mail-or">ou écrivez-moi directement</p>
+        <a class="mail" id="mail" style="margin-top:6px" href="mailto:marlonpavid@gmail.com">marlonpavid@gmail.com</a>
         <div class="mail-actions">
           <button class="btn" type="button" id="copy-mail"><svg class="star" aria-hidden="true"><use href="#star-3"/></svg>copier l'adresse</button>
           <span class="copied" id="copy-mail-status" aria-live="polite"></span>
@@ -1149,6 +1178,33 @@ main,.footer{position:relative;z-index:1}
       }));
     }, () => {});
   }
+
+
+  // --- formulaire de contact (FormSubmit, envoi en AJAX) ---
+  (() => {
+    const f = document.getElementById('cform'); if (!f) return;
+    const st = document.getElementById('cf-status'), btn = document.getElementById('cf-send');
+    const t0 = Date.now();
+    const say = (m, err) => { st.textContent = m; st.classList.toggle('is-error', !!err); };
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (f._honey.value) return;                                       // robot : champ piège rempli
+      if (Date.now() - t0 < 3000) { say('Un instant, puis réessayez.', 1); return; }   // envoi trop rapide = robot
+      if (!f.checkValidity()) { f.reportValidity(); say('Vérifiez les champs en rouge.', 1); return; }
+      const last = +sessionStorage.getItem('cf-last') || 0;
+      if (Date.now() - last < 60000) { say('Message déjà envoyé, merci ! Réessayez dans une minute.', 1); return; }
+      btn.disabled = true; say('Envoi en cours…');
+      try {
+        const data = Object.fromEntries(new FormData(f));
+        for (const k of ['name', 'email', 'message']) data[k] = String(data[k]).trim().slice(0, 2000);
+        const r = await fetch(f.action, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
+        const j = await r.json().catch(() => ({}));
+        if (r.ok && String(j.success) === 'true') { f.reset(); sessionStorage.setItem('cf-last', Date.now()); say('Merci, votre message est bien parti ✶ Je vous réponds vite.'); }
+        else say('L’envoi n’a pas marché. Écrivez-moi directement à l’adresse ci-dessous.', 1);
+      } catch (_) { say('Pas de connexion. Écrivez-moi directement à l’adresse ci-dessous.', 1); }
+      finally { btn.disabled = false; }
+    });
+  })();
 
   lbPrev.addEventListener('click', () => step(-1));
   lbNext.addEventListener('click', () => step(1));
