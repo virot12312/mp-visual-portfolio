@@ -13,6 +13,8 @@
 <link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
 <link rel="manifest" href="/site.webmanifest">
+<link rel="preload" as="image" href="assets/img/hero-paysage.webp" imagesrcset="assets/img/hero-paysage-960.webp 960w, assets/img/hero-paysage.webp 1365w" imagesizes="100vw" media="(min-aspect-ratio: 1/1)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/03-foret-falaise-800.webp" media="(max-aspect-ratio: 1/1)" fetchpriority="high">
 <meta property="og:type" content="profile">
 <meta property="og:locale" content="fr_CH">
 <meta property="og:site_name" content="MP VISUAL">
@@ -489,11 +491,15 @@ main,.footer{position:relative;z-index:1}
   filter:drop-shadow(2px 3px 0 rgb(19 63 26 / .38))}
 .sky__star.is-alt{color:var(--alt)}
 .sky__star svg{display:block;width:100%;height:100%;fill:currentColor}
-.grain{position:fixed;inset:-120px;z-index:70;pointer-events:none;opacity:.075;mix-blend-mode:overlay;background-size:180px;animation:grain 1s steps(6) infinite}
+.grain{position:fixed;inset:0;z-index:70;pointer-events:none;opacity:.05;background-size:180px;transform:translateZ(0)}
+@media (hover:none){.grain{opacity:.04}}
 @keyframes grain{
   0%{transform:translate(0,0)}20%{transform:translate(-40px,22px)}40%{transform:translate(28px,-36px)}
   60%{transform:translate(-18px,40px)}80%{transform:translate(44px,12px)}100%{transform:translate(0,0)}}
 
+
+/* le menu fixe à droite ne doit pas recouvrir les textes d'introduction (écrans larges) */
+@media (min-width:981px){.work__intro,.toolbar{margin-right:clamp(120px,10vw,170px)}}
 /* ---------- responsive ---------- */
 @media (max-width:980px){
   .about__grid,.contact__grid{grid-template-columns:minmax(0,1fr)}
@@ -558,7 +564,7 @@ main,.footer{position:relative;z-index:1}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
     <filter id="torn" x="-4%" y="-8%" width="108%" height="116%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="4" seed="8" result="n"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="2" seed="8" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="11" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
 <symbol id="star-1" viewBox="0 0 93.2 100.0"><path d="M31.6 0.0 L30.8 0.4 L30.0 1.6 L33.4 28.2 L32.8 29.4 L31.2 31.0 L28.8 32.0 L1.6 31.8 L0.6 32.2 L0.0 33.0 L0.2 35.0 L1.8 36.8 L20.9 52.5 L22.3 53.9 L23.3 56.1 L23.1 59.4 L13.5 88.3 L14.7 89.9 L15.9 90.1 L16.9 89.7 L40.6 72.6 L41.9 72.0 L43.7 72.0 L45.1 72.6 L46.9 74.6 L61.2 99.0 L62.2 99.8 L63.6 99.8 L64.8 98.6 L64.2 58.1 L64.6 56.9 L65.8 55.7 L67.6 55.1 L90.7 51.7 L92.2 50.9 L92.8 50.1 L93.0 47.5 L91.3 45.7 L61.2 34.0 L58.3 32.2 L53.9 27.0 L34.0 0.6 L33.2 0.0Z"/></symbol>
@@ -593,8 +599,10 @@ main,.footer{position:relative;z-index:1}
 
 <main id="top">
   <header class="hero">
-    <img class="hero__photo" src="assets/img/03-foret-falaise.webp" srcset="assets/img/03-foret-falaise-800.webp 800w, assets/img/03-foret-falaise.webp 1365w" sizes="100vw"
-         alt="Forêt de sapins au pied d'une grande falaise, rendu pellicule" width="1365" height="2048" fetchpriority="high">
+    <picture>
+      <source media="(min-aspect-ratio: 1/1)" srcset="assets/img/hero-paysage-960.webp 960w, assets/img/hero-paysage.webp 1365w" sizes="100vw" width="1365" height="853">
+      <img class="hero__photo" src="assets/img/03-foret-falaise-800.webp" alt="Forêt de sapins au pied d'une grande falaise, rendu pellicule" width="800" height="1200" fetchpriority="high" decoding="async">
+    </picture>
     <h1 class="hero__title">
       <span class="sr-only">Marlon Pavid, MP VISUAL. Médiamaticien : graphisme et photographie.</span>
       <svg class="scribble" data-text="MARLON|  PAVID" data-seed="3" data-draw="load" aria-hidden="true"></svg>
@@ -799,22 +807,22 @@ main,.footer{position:relative;z-index:1}
     <div class="arc" id="arc" role="region" aria-roledescription="carrousel" aria-label="Série bloc, 8 photos">
       <div class="arc__stage" id="arc-stage">
         <div class="arc__layer"><div class="arc__ring" id="arc-ring">
-          <button class="arc__tile" type="button" data-i="0" aria-label="Agrandir la photo 01, bloc crépuscule"><img src="assets/img/01-bloc-crepuscule-800.webp" width="800" height="1200" alt="Vue à la première personne, chaussons aux pieds, deux grimpeurs face à un gros bloc au crépuscule" draggable="false"></button>
-          <button class="arc__tile" type="button" data-i="1" aria-label="Agrandir la photo 02, sortie de bloc"><img src="assets/img/02-sortie-de-bloc-800.webp" width="800" height="1200" alt="Deux grimpeurs de dos regardent un troisième se rétablir en haut d'un bloc moussu" draggable="false"></button>
-          <button class="arc__tile" type="button" data-i="2" aria-label="Agrandir la photo 03, forêt falaise"><img src="assets/img/03-foret-falaise-800.webp" width="800" height="1200" alt="Sapins et arbres morts devant une haute falaise grise sous un ciel clair" draggable="false"></button>
-          <button class="arc__tile" type="button" data-i="3" aria-label="Agrandir la photo 04, départ assis"><img src="assets/img/04-depart-assis-800.webp" width="800" height="1200" alt="Vue plongeante sur un grimpeur en départ assis au-dessus de crash pads colorés" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="4" aria-label="Agrandir la photo 05, pad sur le dos"><img src="assets/img/05-pad-sur-le-dos-800.webp" width="800" height="1067" alt="Un grimpeur porte un crash pad rouge sur le dos entre des blocs moussus, en forêt d’automne" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="5" aria-label="Agrandir la photo 06, marche d’approche"><img src="assets/img/06-marche-d-approche-800.webp" width="800" height="1067" alt="Vue plongeante sur un grimpeur qui tire son crash pad sur un sentier couvert de feuilles mortes" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="6" aria-label="Agrandir la photo 07, lecture du bloc"><img src="assets/img/07-lecture-du-bloc-800.webp" width="800" height="1067" alt="Quatre grimpeurs discutent des prises au pied d’un gros bloc, crash pads au sol" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="7" aria-label="Agrandir la photo 08, dans le mouv’"><img src="assets/img/08-dans-le-mouv-800.webp" width="800" height="1067" alt="Un grimpeur en pleine ascension d’un bloc, ses amis prêts à le parer en dessous" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="0" aria-hidden="true" tabindex="-1"><img src="assets/img/01-bloc-crepuscule-800.webp" width="800" height="1200" alt="" draggable="false"></button>
-          <button class="arc__tile" type="button" data-i="1" aria-hidden="true" tabindex="-1"><img src="assets/img/02-sortie-de-bloc-800.webp" width="800" height="1200" alt="" draggable="false"></button>
-          <button class="arc__tile" type="button" data-i="2" aria-hidden="true" tabindex="-1"><img src="assets/img/03-foret-falaise-800.webp" width="800" height="1200" alt="" draggable="false"></button>
-          <button class="arc__tile" type="button" data-i="3" aria-hidden="true" tabindex="-1"><img src="assets/img/04-depart-assis-800.webp" width="800" height="1200" alt="" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="4" aria-hidden="true" tabindex="-1"><img src="assets/img/05-pad-sur-le-dos-800.webp" width="800" height="1067" alt="" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="5" aria-hidden="true" tabindex="-1"><img src="assets/img/06-marche-d-approche-800.webp" width="800" height="1067" alt="" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="6" aria-hidden="true" tabindex="-1"><img src="assets/img/07-lecture-du-bloc-800.webp" width="800" height="1067" alt="" draggable="false" loading="lazy"></button>
-          <button class="arc__tile" type="button" data-i="7" aria-hidden="true" tabindex="-1"><img src="assets/img/08-dans-le-mouv-800.webp" width="800" height="1067" alt="" draggable="false" loading="lazy"></button>
+          <button class="arc__tile" type="button" data-i="0" aria-label="Agrandir la photo 01, bloc crépuscule"><img src="assets/img/01-bloc-crepuscule-400.webp" width="400" height="400" alt="Vue à la première personne, chaussons aux pieds, deux grimpeurs face à un gros bloc au crépuscule" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="1" aria-label="Agrandir la photo 02, sortie de bloc"><img src="assets/img/02-sortie-de-bloc-400.webp" width="400" height="400" alt="Deux grimpeurs de dos regardent un troisième se rétablir en haut d'un bloc moussu" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="2" aria-label="Agrandir la photo 03, forêt falaise"><img src="assets/img/03-foret-falaise-400.webp" width="400" height="400" alt="Sapins et arbres morts devant une haute falaise grise sous un ciel clair" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="3" aria-label="Agrandir la photo 04, départ assis"><img src="assets/img/04-depart-assis-400.webp" width="400" height="400" alt="Vue plongeante sur un grimpeur en départ assis au-dessus de crash pads colorés" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="4" aria-label="Agrandir la photo 05, pad sur le dos"><img src="assets/img/05-pad-sur-le-dos-400.webp" width="400" height="400" alt="Un grimpeur porte un crash pad rouge sur le dos entre des blocs moussus, en forêt d’automne" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="5" aria-label="Agrandir la photo 06, marche d’approche"><img src="assets/img/06-marche-d-approche-400.webp" width="400" height="400" alt="Vue plongeante sur un grimpeur qui tire son crash pad sur un sentier couvert de feuilles mortes" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="6" aria-label="Agrandir la photo 07, lecture du bloc"><img src="assets/img/07-lecture-du-bloc-400.webp" width="400" height="400" alt="Quatre grimpeurs discutent des prises au pied d’un gros bloc, crash pads au sol" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="7" aria-label="Agrandir la photo 08, dans le mouv’"><img src="assets/img/08-dans-le-mouv-400.webp" width="400" height="400" alt="Un grimpeur en pleine ascension d’un bloc, ses amis prêts à le parer en dessous" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="0" aria-hidden="true" tabindex="-1"><img src="assets/img/01-bloc-crepuscule-400.webp" width="400" height="400" alt="" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="1" aria-hidden="true" tabindex="-1"><img src="assets/img/02-sortie-de-bloc-400.webp" width="400" height="400" alt="" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="2" aria-hidden="true" tabindex="-1"><img src="assets/img/03-foret-falaise-400.webp" width="400" height="400" alt="" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="3" aria-hidden="true" tabindex="-1"><img src="assets/img/04-depart-assis-400.webp" width="400" height="400" alt="" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="4" aria-hidden="true" tabindex="-1"><img src="assets/img/05-pad-sur-le-dos-400.webp" width="400" height="400" alt="" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="5" aria-hidden="true" tabindex="-1"><img src="assets/img/06-marche-d-approche-400.webp" width="400" height="400" alt="" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="6" aria-hidden="true" tabindex="-1"><img src="assets/img/07-lecture-du-bloc-400.webp" width="400" height="400" alt="" draggable="false" decoding="async"></button>
+          <button class="arc__tile" type="button" data-i="7" aria-hidden="true" tabindex="-1"><img src="assets/img/08-dans-le-mouv-400.webp" width="400" height="400" alt="" draggable="false" decoding="async"></button>
         </div></div>
         <div class="arc__center">
           <p class="arc__count" id="arc-count" aria-live="off">01 / 08</p>
@@ -1132,7 +1140,8 @@ main,.footer{position:relative;z-index:1}
   const lb = $('#lightbox'), lbImg = $('#lb-img'), lbNum = $('#lb-num'), lbTitle = $('#lb-title');
   const lbPrev = $('#lb-prev'), lbNext = $('#lb-next');
   const PHOTOS = [{f: '01-bloc-crepuscule', t: 'bloc crépuscule', d: 'Fin de journée, chaussons aux pieds. On regarde les autres essayer.', alt: 'Vue à la première personne, chaussons aux pieds, deux grimpeurs face à un gros bloc au crépuscule'}, {f: '02-sortie-de-bloc', t: 'sortie de bloc', d: 'Le moment où tout le monde lève la tête.', alt: "Deux grimpeurs de dos regardent un troisième se rétablir en haut d'un bloc moussu"}, {f: '03-foret-falaise', t: 'forêt falaise', d: 'La marche d’approche, entre les sapins et la paroi.', alt: 'Sapins et arbres morts devant une haute falaise grise sous un ciel clair'}, {f: '04-depart-assis', t: 'départ assis', d: 'Tous les crash pads au sol pour un départ assis.', alt: 'Vue plongeante sur un grimpeur en départ assis au-dessus de crash pads colorés'}, {f: '05-pad-sur-le-dos', t: 'pad sur le dos', d: 'On porte le crash pad jusqu’au prochain bloc.', alt: 'Un grimpeur porte un crash pad rouge sur le dos entre des blocs moussus, en forêt d’automne'}, {f: '06-marche-d-approche', t: 'marche d’approche', d: 'Feuilles mortes, fougères et le pad qui glisse.', alt: 'Vue plongeante sur un grimpeur qui tire son crash pad sur un sentier couvert de feuilles mortes'}, {f: '07-lecture-du-bloc', t: 'lecture du bloc', d: 'Avant d’essayer, on décortique les prises à plusieurs.', alt: 'Quatre grimpeurs discutent des prises au pied d’un gros bloc, crash pads au sol'}, {f: '08-dans-le-mouv', t: 'dans le mouv’', d: 'Le pas clé, les parades prêtes en dessous.', alt: 'Un grimpeur en pleine ascension d’un bloc, ses amis prêts à le parer en dessous'}];
-  const series = PHOTOS.map((p) => ({ src: `assets/img/${p.f}.webp`, title: p.t, alt: p.alt }));
+  const lbSize = () => (Math.min(innerWidth, 900) < 900 ? '-800' : '');   // téléphone : 800 px suffisent
+  const series = PHOTOS.map((p) => ({ get src() { return `assets/img/${p.f}${lbSize()}.webp`; }, title: p.t, alt: p.alt }));
   const PROJECTS = JSON.parse($('#projects-data').textContent);
   let gallery = series, idx = 0;
   const pad = (n) => String(n).padStart(2, '0');
